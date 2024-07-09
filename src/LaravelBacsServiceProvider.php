@@ -2,7 +2,6 @@
 
 namespace LaravelBacs\LaravelBacs;
 
-use LaravelBacs\LaravelBacs\Commands\LaravelBacsCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -18,9 +17,6 @@ class LaravelBacsServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-bacs')
             ->hasConfigFile()
-            ->hasViews()
-            ->hasRoute('api')
-            ->hasMigration('create_laravel-bacs_table')
-            ->hasCommand(LaravelBacsCommand::class);
+            ->hasRoute('api');
     }
 }
