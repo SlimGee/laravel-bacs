@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace LaravelBacs\LaravelBacs\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class LaravelBacsCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-bacs';
 
     public $description = 'My command';
 
