@@ -1,36 +1,34 @@
 # HSBC BACS Standard 18 for direct bank transactions implementation
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/slimgee/laravel-bacs.svg?style=flat-square)](https://packagist.org/packages/slimgee/laravel-bacs)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/slimgee/laravel-bacs/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/slimgee/laravel-bacs/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/slimgee/laravel-bacs/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/slimgee/laravel-bacs/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/slimgee/laravel-bacs.svg?style=flat-square)](https://packagist.org/packages/slimgee/laravel-bacs)
+Partial implementation of the HSBC BACS Standard 18 for direct bank transactions in Laravel
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-bacs.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-bacs)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
 ## Installation
 
-You can install the package via composer:
-
+This package is not on packagist yet, so you need to install it as a local package. In your "packages" somewhere close to your Laravel project, clone this repository:
 ```bash
-composer require slimgee/laravel-bacs
+git clone https://github.com/slimgee/laravel-bacs
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="laravel-bacs-migrations"
-php artisan migrate
+Add the path to the package in your Laravel composer.json file:
+```json
+"repositories": [
+    {
+        "type": "path",
+        "url": "../packages/laravel-bacs"
+    }
+    "require": {
+        "slimgee/laravel-bacs": "*"
+    }
+],
 ```
 
-You can publish the config file with:
+Finally, run:
+```bash
+composer install
+```
+
+Now, You can publish the config file with:
 
 ```bash
 php artisan vendor:publish --tag="laravel-bacs-config"
@@ -40,21 +38,65 @@ This is the contents of the published config file:
 
 ```php
 return [
+    /*
+     * -----------------------
+     *
+     * The route for the BACS endpoint
+     */
+    'route' => 'api/bacs',
+
+    /*
+     * -------------------------
+     *
+     * Register any middleware you'd like to run before this route
+     */
+    'middleware' => [],
 ];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravel-bacs-views"
 ```
 
 ## Usage
 
-```php
-$laravelBacs = new LaravelBacs\LaravelBacs();
-echo $laravelBacs->echoPhrase('Hello, LaravelBacs!');
+This package will expose a `GET` route that accepts a number query parameters to and return BACS standard 18 message response in JSON format
+
+By default the endpoint is at `/api/bacs` but you're free to configure to something that best suits your requirements by editing the config file
+
+You may also want to register middleware that you'd want to run before the route hits, probably `auth`, simply append to the middleware array key in the config file
+
+### Get parameters
+
+When making requests to the endpoint, you can pass the following query parameters:
+
+
+| Parameter  | Required? | Description 
+| ------------- | ------------- | ------------ |
+| serial_number | Yes  | Unique alpha-number characters, right justified but can’t be all spaces or zeroes. Each unique reference is
+validated against duplicates and will be held for a period of 3 months |
+|  sun  | optional | (Owner ID) Assigned by BACS to you. This is coordinated by our Client Implementation Team and provided to you. This is also known as the BACS OI |
+| marker | optional, default HSBC | marker is required when `sun` is not provided. It can be either `HSBC` or `SAGE` |
+| generation_number | optional | 4 digit number |
+| generation_version_number | optional | 2 digit number |
+| creation_date | optional | Date in the format `YYYY-MM-DD`. If not provided, the current date will be used |
+| expiration_date | optional | The expiration date indicates to BACS the earliest date at which file may be overwritten. Date in the format `YYYY-MM-DD`. If not provided, the current date will be used |
+| system_code | optional | 13 characters string |
+| fast_payment | optional | 1 or 0 |
+
+
+Simply append the parameters to the endpoint URL, for example:
 ```
+https://yourdomain.com/api/bacs?serial_number=123456
+```
+
+example response
+
+```json
+{
+  "vol": "VOL18DLYX80                              rSfDRI                                1",
+  "hdr": "HDR1ArSfDRS  1rSfDR8DLYX800010001129246 24191 242120000000X9i0VbIs2hmNq       "
+}
+```
+
+
+Additionally, a swagger documentation is available at [https://app.swaggerhub.com/apis/GivenNcube/Bacs/1.0.0](https://app.swaggerhub.com/apis/GivenNcube/Bacs/1.0.0) 
 
 ## Testing
 
@@ -70,9 +112,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-## Security Vulnerabilities
 
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
 
 ## Credits
 
