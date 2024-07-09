@@ -9,7 +9,7 @@ it('can validate when request is made without required params', function () {
 });
 
 it('can return valid message response', function () {
-    $response = $this->getJson('/api/bacs?' . http_build_query([
+    $response = $this->getJson('/api/bacs?'.http_build_query([
         'serial_number' => Str::random(6),
         'sun' => Str::random(6),
         'marker' => 'HSBC',

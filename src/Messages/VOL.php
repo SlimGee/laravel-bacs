@@ -17,7 +17,7 @@ class VOL
             $request->query('serial_number'),
             '0',
             str_pad('', 20, ' '),
-            $request->has('sun') ? str_pad('', 6, ' ') : Str::upper($request->query('marker', 'HSBC')) . str_pad('', 2, ' '),
+            $request->has('sun') ? str_pad('', 6, ' ') : Str::upper($request->query('marker', 'HSBC')).str_pad('', 2, ' '),
             str_pad('', 4, ' '),
             $request->has('sun') ? $request->query('sun') : str_pad('', 6, ' '),
             str_pad('', 4, ' '),
