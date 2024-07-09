@@ -9,7 +9,7 @@ it('can validate when request is made without required params', function () {
 });
 
 it('can return valid message response', function () {
-    getJson('/api/bacs?' . http_build_query([
+    getJson('/api/bacs?'.http_build_query([
         'serial_number' => Str::random(6),
         'sun' => Str::random(6),
         'marker' => 'HSBC',
@@ -27,15 +27,15 @@ it('can return valid vol and hdr1 when fast payment is marked as false', functio
     $creation_at = now()->addYears(5);
     $expiration_at = now()->addYears(5)->addDays(21);
 
-    $creation_at_assert = $creation_at->format('y') . str_pad(
+    $creation_at_assert = $creation_at->format('y').str_pad(
         (string) $creation_at->dayOfYear, 3, '0', STR_PAD_LEFT
     );
 
-    $expiration_at_assert = $expiration_at->format('y') . str_pad(
+    $expiration_at_assert = $expiration_at->format('y').str_pad(
         (string) $expiration_at->dayOfYear, 3, '0', STR_PAD_LEFT
     );
 
-    getJson('/api/bacs?' . http_build_query([
+    getJson('/api/bacs?'.http_build_query([
         'serial_number' => $serial,
         'sun' => $sun,
         'marker' => 'HSBC',
@@ -61,15 +61,15 @@ it('can return valid vol and hdr1 when fast payment is marked as true', function
     $creation_at = now()->addYears(5);
     $expiration_at = now()->addYears(5)->addDays(21);
 
-    $creation_at_assert = now()->format('y') . str_pad(
+    $creation_at_assert = now()->format('y').str_pad(
         (string) now()->dayOfYear, 3, '0', STR_PAD_LEFT
     );
 
-    $expiration_at_assert = now()->format('y') . str_pad(
+    $expiration_at_assert = now()->format('y').str_pad(
         (string) now()->dayOfYear, 3, '0', STR_PAD_LEFT
     );
 
-    getJson('/api/bacs?' . http_build_query([
+    getJson('/api/bacs?'.http_build_query([
         'serial_number' => $serial,
         'sun' => $sun,
         'marker' => 'HSBC',
@@ -92,7 +92,7 @@ it('can return valid vol and hdr1 when fast payment is marked as true', function
 it('can return records with defined marker', function () {
     $marker = ['hsbc', 'sage'][rand(0, 1)];
 
-    getJson('/api/bacs?' . http_build_query([
+    getJson('/api/bacs?'.http_build_query([
         'serial_number' => Str::random(6),
         'marker' => $marker,
         'generation_number' => rand(1000, 9999),

@@ -13,7 +13,7 @@ class HDR1
      */
     public static function fromRequest(Request $request, string $vol): string
     {
-        if ($request->query('fast_payment', '0') == '1' || !$request->has(['creation_date', 'expiration_date'])) {
+        if ($request->query('fast_payment', '0') == '1' || ! $request->has(['creation_date', 'expiration_date'])) {
             $creation_date = now();
             $expiration_date = now();
         } else {
@@ -35,8 +35,8 @@ class HDR1
             '0001',
             $request->query('generation_number', str_pad('', 4, ' ')),
             $request->query('generation_version_number', str_pad('', 2, ' ')),
-            $creation_date->format(' y') . str_pad((string) $creation_date->dayOfYear, 3, '0', STR_PAD_LEFT),
-            $expiration_date->format(' y') . str_pad((string) $expiration_date->dayOfYear, 3, '0', STR_PAD_LEFT),
+            $creation_date->format(' y').str_pad((string) $creation_date->dayOfYear, 3, '0', STR_PAD_LEFT),
+            $expiration_date->format(' y').str_pad((string) $expiration_date->dayOfYear, 3, '0', STR_PAD_LEFT),
             '0',
             str_pad('', 6, '0'),
             $request->query('system_code', Str::random(13)),
